@@ -1,0 +1,7 @@
+Déposez ici les grandes images du diaporama de la page d'accueil
+(1400x600 pixels recommandé).
+
+Puis dans js/pages.js, cherchez les 3 lignes contenant "hero-slide" et
+remplacez l'URL Unsplash par le chemin local, par exemple :
+
+    background-image: url('images/hero/promo-1.jpg');

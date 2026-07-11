@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sao Tech Market - Marketplace Électronique Premium en RDC</title>
+    <meta name="description" content="Découvrez des équipements électroniques premium avec livraison rapide, des prix compétitifs et 30 jours pour changer d'avis, partout en République Démocratique du Congo.">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Conteneur principal de l'application -->
+    <div id="app"></div>
+
+    <!-- Tiroir Panier -->
+    <div id="cartDrawer" class="cart-drawer">
+        <div class="cart-overlay" onclick="toggleCart()"></div>
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3>Mon Panier <span id="cartCount">(0)</span></h3>
+                <button class="close-btn" onclick="toggleCart()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="cart-items" id="cartItems"></div>
+            <div class="cart-footer" id="cartFooter"></div>
+        </div>
+    </div>
+
+    <!-- Modal de connexion -->
+    <div id="loginModal" class="modal">
+        <div class="modal-overlay" onclick="toggleLoginModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="toggleLoginModal()"><i class="fas fa-times"></i></button>
+            <div class="modal-tabs">
+                <button class="modal-tab active" data-tab="signin" onclick="switchLoginTab('signin')">Connexion</button>
+                <button class="modal-tab" data-tab="register" onclick="switchLoginTab('register')">Inscription</button>
+            </div>
+            <form id="signinForm" class="form-content active" onsubmit="handleCustomerLoginSubmit(event)">
+                <div class="form-group">
+                    <label>Adresse e-mail *</label>
+                    <input type="email" name="email" placeholder="votre@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Mot de passe *</label>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary full-width">Se connecter</button>
+            </form>
+            <form id="registerForm" class="form-content" onsubmit="handleCustomerRegisterSubmit(event)">
+                <div class="form-row">
+                    <input type="text" name="firstName" placeholder="Prénom *" required>
+                    <input type="text" name="lastName" placeholder="Nom *" required>
+                </div>
+                <div class="form-group">
+                    <label>Adresse e-mail *</label>
+                    <input type="email" name="email" placeholder="votre@email.com" required>
+                </div>
+                <div class="form-row">
+                    <input type="tel" name="phone" placeholder="Téléphone (+243...)" required>
+                    <select name="city">
+                        <option value="Bukavu">Bukavu</option>
+                        <option value="Uvira">Uvira</option>
+                        <option value="Goma">Goma</option>
+                        <option value="Baraka">Baraka (territoire de Fizi)</option>
+                        <option value="Autre">Autre ville</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Mot de passe *</label>
+                    <input type="password" name="password" placeholder="••••••••" required minlength="4">
+                </div>
+                <label class="checkbox-label">
+                    <input type="checkbox" name="newsletter">
+                    <span>S'abonner à notre newsletter</span>
+                </label>
+                <button type="submit" class="btn btn-primary full-width">S'inscrire</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Popup Newsletter -->
+    <div id="newsletterPopup" class="modal">
+        <div class="modal-overlay" onclick="closeNewsletter()"></div>
+        <div class="modal-content newsletter-modal">
+            <button class="modal-close" onclick="closeNewsletter()"><i class="fas fa-times"></i></button>
+            <div class="newsletter-popup-header">
+                <p class="newsletter-tag">Offre exclusive</p>
+                <h2>10% DE RÉDUCTION</h2>
+            </div>
+            <div class="modal-body">
+                <p>Nous sommes ravis de vous tenir informé ! Abonnez-vous pour recevoir nos offres exclusives et découvrir nos nouveautés en avant-première.</p>
+                <div class="newsletter-form">
+                    <input type="email" placeholder="Adresse e-mail">
+                    <button class="btn btn-primary" onclick="subscribeNewsletter()">S'abonner</button>
+                </div>
+                <button class="link-btn" onclick="closeNewsletter()">Non merci, je ne veux pas de réduction</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/pages.js"></script>
+    <script src="js/sellers.js"></script>
+    <script src="js/customers.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+Déposez ici les photos de vos produits (formats .jpg, .jpeg, .png ou .webp).
+
+Puis dans js/data.js, pour chaque produit, remplacez la valeur du champ "image"
+par le chemin du fichier, par exemple :
+
+    image: "images/products/telephone-vinova.jpg"
+
+Conseils :
+- Utilisez des noms de fichiers simples, sans espaces ni accents
+  (ex: casque-audio-1.jpg et non "Casque Audio (1).jpg")
+- Taille recommandée : au moins 800x800 pixels, format carré si possible
+- Compressez vos photos avant de les mettre en ligne (tinypng.com,
+  squoosh.app) pour que le site reste rapide, surtout pour les visiteurs
+  en RDC avec une connexion mobile.

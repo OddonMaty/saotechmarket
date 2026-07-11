@@ -1,0 +1,392 @@
+// ===================== TAUX DE CHANGE =====================
+// Le site affiche tous les prix uniquement en francs congolais (CDF).
+// Les prix des produits ci-dessous restent en dollars américains (USD)
+// en interne — c'est juste une unité de référence pratique pour vous
+// quand vous modifiez les prix. Le site les convertit automatiquement
+// en CDF selon le taux du jour (récupéré en ligne, avec ce taux de
+// secours utilisé si la connexion/API est indisponible).
+// 👉 Pensez à ajuster ce chiffre de temps en temps pour qu'il reste
+// proche du taux réel du marché.
+const FALLBACK_USD_TO_CDF_RATE = 2800;
+
+// ===================== DONNÉES PRODUITS =====================
+// Chaque produit appartient à un "department" (rayon) qui correspond aux
+// trois colonnes du menu déroulant "Nos produits" : électronique,
+// construction, ou divertissement.
+const products = [
+    {
+        id: 1,
+        name: "Vinova SmartPhone Pro 12",
+        price: 650,
+        originalPrice: 950,
+        discount: 31,
+        department: "electronique",
+        category: "Smartphone",
+        image: "1511707171634-5f897ff02aa9",
+        rating: 4.5,
+        reviews: 128,
+        inStock: true,
+        sku: "E-00001",
+        colors: ["Noir", "Argent", "Or"],
+        sizes: ["64Go", "128Go", "256Go"],
+        tags: ["new", "bestseller"],
+        description: "108MP de clarté. Vitesse 5G. Batterie toute la journée. Le seul téléphone dont vous avez besoin."
+    },
+    {
+        id: 2,
+        name: "Audio Master Pro XR",
+        price: 256,
+        originalPrice: 320,
+        discount: 20,
+        department: "electronique",
+        category: "Audio",
+        image: "1505740420928-5e560c06d30e",
+        rating: 4.8,
+        reviews: 89,
+        inStock: true,
+        sku: "E-00127",
+        colors: ["Noir", "Blanc"],
+        sizes: [],
+        tags: ["wireless", "noise-cancelling"],
+        description: "40 heures d'autonomie, réduction active du bruit, un son de qualité studio pour votre quotidien."
+    },
+    {
+        id: 3,
+        name: "ProTab Ultra 12\"",
+        price: 489,
+        originalPrice: 599,
+        discount: 18,
+        department: "electronique",
+        category: "Tablette",
+        image: "1544244015-0df4702c2e98",
+        rating: 4.3,
+        reviews: 67,
+        inStock: true,
+        sku: "E-00203",
+        colors: ["Gris", "Argent"],
+        sizes: ["128Go", "256Go"],
+        tags: ["tablet", "productivity"],
+        description: "Un magnifique écran de 12 pouces avec des performances puissantes, pour le travail comme pour les loisirs."
+    },
+    {
+        id: 4,
+        name: "StreamWatch Series 5",
+        price: 199,
+        originalPrice: 299,
+        discount: 33,
+        department: "electronique",
+        category: "Montre connectée",
+        image: "1523275335684-37898b6baf30",
+        rating: 4.6,
+        reviews: 203,
+        inStock: true,
+        sku: "E-00089",
+        colors: ["Noir", "Bleu", "Rouge"],
+        sizes: [],
+        tags: ["smartwatch", "fitness"],
+        description: "Suivez votre forme physique, restez connecté et gérez votre journée en toute simplicité."
+    },
+    {
+        id: 5,
+        name: "ProBook 15 Ultra",
+        price: 1249,
+        originalPrice: 1499,
+        discount: 17,
+        department: "electronique",
+        category: "Ordinateur",
+        image: "1496181133206-80ce9b88a853",
+        rating: 4.7,
+        reviews: 156,
+        inStock: true,
+        sku: "E-00089",
+        colors: ["Argent", "Gris"],
+        sizes: ["512Go", "1To"],
+        tags: ["laptop", "gaming"],
+        description: "Intel Core i9 · RTX 4070 · 32 Go de RAM. Conçu pour les créateurs qui ne font aucun compromis."
+    },
+    {
+        id: 6,
+        name: "CineSound BT Speaker",
+        price: 89,
+        originalPrice: 149,
+        discount: 40,
+        department: "electronique",
+        category: "Audio",
+        image: "1608043152269-423dbba4e7e1",
+        rating: 4.2,
+        reviews: 44,
+        inStock: false,
+        sku: "E-00412",
+        colors: ["Noir", "Bleu"],
+        sizes: [],
+        tags: ["speaker", "portable"],
+        description: "Enceinte portable sans fil avec une qualité sonore haut de gamme."
+    },
+    {
+        id: 7,
+        name: "VisionCam Pro 4K",
+        price: 799,
+        originalPrice: 999,
+        discount: 20,
+        department: "electronique",
+        category: "Appareil photo",
+        image: "1516035069371-29a1b244cc32",
+        rating: 4.9,
+        reviews: 78,
+        inStock: true,
+        sku: "E-00567",
+        colors: ["Noir"],
+        sizes: [],
+        tags: ["camera", "4k"],
+        description: "Caméra vidéo 4K professionnelle pour créateurs de contenu."
+    },
+    {
+        id: 8,
+        name: "CinemaView 55\" OLED",
+        price: 1899,
+        originalPrice: 2399,
+        discount: 21,
+        department: "electronique",
+        category: "Télévision",
+        image: "1593359677879-a4bb92f4834b",
+        rating: 4.4,
+        reviews: 112,
+        inStock: true,
+        sku: "E-00634",
+        colors: ["Noir"],
+        sizes: ["55\"", "65\""],
+        tags: ["tv", "oled"],
+        description: "Un superbe écran OLED de 55 pouces avec des noirs profonds et réalistes."
+    },
+
+    // ---------- MATÉRIAUX DE CONSTRUCTION ----------
+    {
+        id: 9,
+        name: "Ciment Portland CEM I 42.5R",
+        price: 14,
+        originalPrice: 17,
+        discount: 18,
+        department: "construction",
+        category: "Ciment",
+        image: "1560435650-7ec2e17ba926",
+        rating: 4.6,
+        reviews: 52,
+        inStock: true,
+        sku: "C-00001",
+        colors: [],
+        sizes: ["Sac 50kg"],
+        tags: ["new"],
+        description: "Ciment gris haute résistance, idéal pour fondations, dalles et maçonnerie générale. Sac de 50 kg."
+    },
+    {
+        id: 10,
+        name: "Fer à béton strié 12mm",
+        price: 9,
+        originalPrice: null,
+        discount: 0,
+        department: "construction",
+        category: "Fer à béton",
+        image: "1763771420303-0f11ccf613d1",
+        rating: 4.5,
+        reviews: 31,
+        inStock: true,
+        sku: "C-00045",
+        colors: [],
+        sizes: ["Barre 6m", "Barre 12m"],
+        tags: ["bestseller"],
+        description: "Barre d'armature striée en acier, pour le renforcement des structures en béton armé."
+    },
+    {
+        id: 11,
+        name: "Peinture façade extérieure",
+        price: 52,
+        originalPrice: 65,
+        discount: 20,
+        department: "construction",
+        category: "Peinture",
+        image: "1561924018-4f213bdc7364",
+        rating: 4.4,
+        reviews: 28,
+        inStock: true,
+        sku: "C-00112",
+        colors: ["Blanc", "Beige", "Gris clair"],
+        sizes: ["Pot 20L"],
+        tags: ["new"],
+        description: "Peinture façade résistante aux intempéries, forte couvrance, séchage rapide. Pot de 20 litres."
+    },
+    {
+        id: 12,
+        name: "Carrelage sol 60x60 poli",
+        price: 22,
+        originalPrice: 28,
+        discount: 21,
+        department: "construction",
+        category: "Carrelage",
+        image: "1523350165414-082d792c4bcc",
+        rating: 4.7,
+        reviews: 39,
+        inStock: true,
+        sku: "C-00178",
+        colors: ["Gris", "Beige", "Blanc"],
+        sizes: ["Carton (1.44m²)"],
+        tags: ["bestseller"],
+        description: "Carrelage grès cérame poli 60x60, pour sols intérieurs résidentiels et commerciaux. Vendu au carton."
+    },
+
+    // ---------- VÊTEMENTS ET CHAUSSURES ----------
+    {
+        id: 13,
+        name: "Chemise coton popeline",
+        price: 24,
+        originalPrice: 32,
+        discount: 25,
+        department: "vetements",
+        category: "Chemises",
+        image: "1602810316693-3667c854239a",
+        rating: 4.5,
+        reviews: 58,
+        inStock: true,
+        sku: "V-00001",
+        colors: ["Bleu", "Blanc", "Noir"],
+        sizes: ["S", "M", "L", "XL"],
+        tags: ["bestseller"],
+        description: "Chemise homme en coton popeline, coupe classique, idéale au bureau comme en soirée."
+    },
+    {
+        id: 14,
+        name: "Robe fluide sans manches",
+        price: 29,
+        originalPrice: null,
+        discount: 0,
+        department: "vetements",
+        category: "Robes",
+        image: "1585052201332-b8c0ce30972f",
+        rating: 4.7,
+        reviews: 46,
+        inStock: true,
+        sku: "V-00042",
+        colors: ["Vert", "Bordeaux", "Noir"],
+        sizes: ["S", "M", "L"],
+        tags: ["new"],
+        description: "Robe légère sans manches, tissu fluide et confortable, parfaite pour toute la journée."
+    },
+    {
+        id: 15,
+        name: "Pantalon jean coupe droite",
+        price: 32,
+        originalPrice: 40,
+        discount: 20,
+        department: "vetements",
+        category: "Pantalons",
+        image: "1645380672072-43f44d5ee29d",
+        rating: 4.4,
+        reviews: 71,
+        inStock: true,
+        sku: "V-00088",
+        colors: ["Bleu délavé", "Noir"],
+        sizes: ["38", "40", "42", "44"],
+        tags: ["bestseller"],
+        description: "Jean coupe droite en denim résistant, un incontournable pour toutes les occasions."
+    },
+    {
+        id: 16,
+        name: "Baskets urbaines confort",
+        price: 45,
+        originalPrice: 58,
+        discount: 22,
+        department: "vetements",
+        category: "Chaussures",
+        image: "1656335362192-2bc9051b1824",
+        rating: 4.6,
+        reviews: 93,
+        inStock: true,
+        sku: "V-00120",
+        colors: ["Blanc", "Gris"],
+        sizes: ["39", "40", "41", "42", "43", "44"],
+        tags: ["new"],
+        description: "Baskets légères et respirantes, semelle confort pour un usage quotidien."
+    },
+
+    // ---------- IMPRIMANTES ----------
+    {
+        id: 17,
+        name: "Imprimante Laser Monochrome Pro",
+        price: 145,
+        originalPrice: 179,
+        discount: 19,
+        department: "imprimantes",
+        category: "Imprimante Laser",
+        image: "1587307307189-0354b351e9e1",
+        rating: 4.5,
+        reviews: 34,
+        inStock: true,
+        sku: "P-00001",
+        colors: [],
+        sizes: [],
+        tags: ["bestseller"],
+        description: "Imprimante laser monochrome rapide et économique, idéale pour un usage bureautique intensif."
+    },
+    {
+        id: 18,
+        name: "Imprimante Jet d'encre Couleur",
+        price: 89,
+        originalPrice: 109,
+        discount: 18,
+        department: "imprimantes",
+        category: "Imprimante Jet d'encre",
+        image: "1650094980833-7373de26feb6",
+        rating: 4.3,
+        reviews: 27,
+        inStock: true,
+        sku: "P-00023",
+        colors: [],
+        sizes: [],
+        tags: ["new"],
+        description: "Imprimante jet d'encre couleur, parfaite pour les documents et photos à la maison."
+    },
+    {
+        id: 19,
+        name: "Multifonction Imprimante-Scanner-Copieur",
+        price: 168,
+        originalPrice: 199,
+        discount: 16,
+        department: "imprimantes",
+        category: "Multifonction",
+        image: "1612815154858-60aa4c59eaa6",
+        rating: 4.6,
+        reviews: 51,
+        inStock: true,
+        sku: "P-00045",
+        colors: [],
+        sizes: [],
+        tags: ["bestseller"],
+        description: "Imprime, scanne et photocopie en un seul appareil compact, avec connexion Wi-Fi."
+    }
+];
+
+const faqs = [
+    {
+        q: "Quels modes de livraison proposez-vous ?",
+        a: "Nous proposons la livraison Standard (2 à 4 jours), Express (24h sur Bukavu) et un retrait en boutique à Bukavu. La livraison est disponible à Bukavu, Uvira et dans les environs du Sud-Kivu."
+    },
+    {
+        q: "Comment passer une commande ?",
+        a: "Parcourez les produits, sélectionnez vos options (couleur, capacité), cliquez sur « Ajouter au panier » puis validez votre commande. Vous pouvez commander en tant qu'invité ou en vous connectant à votre compte."
+    },
+    {
+        q: "Combien de temps faut-il pour recevoir mon colis ?",
+        a: "Les commandes à Bukavu sont expédiées sous 24h depuis notre entrepôt du centre-ville. Pour Uvira, comptez généralement 2 à 4 jours ouvrables selon les conditions de route."
+    },
+    {
+        q: "D'où sont expédiés vos produits ?",
+        a: "Notre entrepôt principal se trouve à Bukavu, sur l'avenue Patrice Lumumba. Nous disposons également d'un point de retrait à Uvira."
+    },
+    {
+        q: "Comment modifier mes informations de facturation ?",
+        a: "Vous pouvez mettre à jour vos informations dans « Paramètres du compte » sous « Paiements & Retours ». Pour une commande déjà passée, contactez notre équipe support."
+    },
+    {
+        q: "Pourquoi n'arrive-je pas à me connecter à mon compte ?",
+        a: "Essayez d'abord de réinitialiser votre mot de passe via le lien « Mot de passe oublié ». Si le problème persiste, videz le cache de votre navigateur et réessayez."
+    }
+];
