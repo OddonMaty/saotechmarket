@@ -1,0 +1,6 @@
+Ce dossier reçoit automatiquement les photos que les vendeurs téléversent
+depuis leur téléphone ou leur ordinateur (au lieu de coller un lien).
+
+Ne supprime pas ce dossier ni le fichier .htaccess à côté — il protège
+le site contre l'exécution de fichiers malveillants qui seraient déposés
+ici sous un faux nom d'image.

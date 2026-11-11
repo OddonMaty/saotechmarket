@@ -15,3 +15,10 @@ define('DB_HOST', 'localhost');
 define('DB_NAME', 'REMPLACER_PAR_LE_NOM_DE_LA_BASE');
 define('DB_USER', 'REMPLACER_PAR_LUTILISATEUR_MYSQL');
 define('DB_PASS', 'REMPLACER_PAR_LE_MOT_DE_PASSE');
+
+// =====================================================================
+// NOTIFICATIONS DE COMMANDE
+// =====================================================================
+// L'adresse e-mail qui reçoit une notification à chaque nouvelle commande
+// (toi / ton équipe). Change-la si besoin.
+define('ADMIN_NOTIFICATION_EMAIL', 'contact@saotechmarket.com');

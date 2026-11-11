@@ -29,4 +29,5 @@ jsonResponse([
     'phone' => $seller['phone'],
     'email' => $seller['email'],
     'city' => $seller['city'],
+    'isOfficial' => (bool)$seller['is_official'],
 ]);

@@ -1,3 +1,19 @@
+// ===================== FRAÎCHEUR DES PRODUITS (30 JOURS) =====================
+// Un produit est considéré "nouveau" pendant 30 jours après sa création, puis
+// devient automatiquement un produit "ancien" — sans aucune action manuelle.
+// - Catalogue officiel (data.js) : utilise le champ "createdAt" (date fixe).
+// - Produits vendeurs : utilise "createdAt", renvoyé par le backend (colonne
+//   created_at de la base de données, remplie automatiquement à la création).
+const NEW_PRODUCT_WINDOW_DAYS = 30;
+
+function isProductNew(product) {
+    if (!product || !product.createdAt) return false;
+    const createdTime = new Date(product.createdAt).getTime();
+    if (isNaN(createdTime)) return false;
+    const ageInDays = (Date.now() - createdTime) / (1000 * 60 * 60 * 24);
+    return ageInDays >= 0 && ageInDays <= NEW_PRODUCT_WINDOW_DAYS;
+}
+
 // ===================== IMAGES PRODUITS =====================
 // Construit l'URL d'une image produit à partir du champ "image" de data.js.
 // - Si "image" commence par "http" (URL complète) → utilisée telle quelle.
@@ -172,7 +188,7 @@ async function initializeApp() {
 
     // Récupérer le taux de change du jour, ainsi que les données vendeurs
     // (produits publiés + session en cours) avant d'afficher la page d'accueil
-    await Promise.all([loadExchangeRate(), initSellerData(), refreshCurrentCustomer()]);
+    await Promise.all([loadExchangeRate(), initSellerData(), refreshCurrentCustomer(), refreshCustomerAddresses()]);
 
     // Charger la page d'accueil
     loadPage('home');
@@ -247,6 +263,8 @@ function loadHomePage() {
     renderHeroPrices();
     renderNewProducts();
     renderDealsProducts();
+    homeCatalogSectorFilter = 'All';
+    renderHomeCatalogProducts();
     updateCartBadge();
 }
 
@@ -302,20 +320,35 @@ function renderNewProducts() {
     const grid = document.getElementById('newProductsGrid');
     if (!grid) return;
 
-    grid.innerHTML = getAllProducts().map(product => createProductCard(product)).join('');
+    const newProducts = getAllProducts().filter(isProductNew);
+    grid.innerHTML = newProducts.length > 0
+        ? newProducts.map(product => createProductCard(product)).join('')
+        : `<p class="empty-collection">Aucun nouveau produit pour le moment.</p>`;
     addProductCardListeners();
 }
+
+let countdownIntervalId = null;
 
 function renderDealsProducts() {
     const grid = document.getElementById('dealsProductsGrid');
     if (!grid) return;
 
-    const dealsProducts = products.slice(0, 4);
-    grid.innerHTML = dealsProducts.map(product => createProductCard(product)).join('');
+    // Toute réduction réelle (prix barré > prix actuel), tous vendeurs et
+    // catalogue officiel confondus — pas seulement les 4 premiers produits
+    // « maison ». Les plus grosses réductions sont mises en avant en premier.
+    const dealsProducts = getAllProducts()
+        .filter(p => p.originalPrice && p.originalPrice > p.price)
+        .sort((a, b) => (b.discount || 0) - (a.discount || 0))
+        .slice(0, 8);
 
-    // Initialiser le compte à rebours
+    grid.innerHTML = dealsProducts.length > 0
+        ? dealsProducts.map(product => createProductCard(product)).join('')
+        : `<p class="empty-collection">Aucune offre en ce moment. Revenez bientôt !</p>`;
+
+    // Éviter d'empiler plusieurs minuteurs si cette section est réaffichée
+    if (countdownIntervalId) clearInterval(countdownIntervalId);
     updateCountdownTimer();
-    setInterval(updateCountdownTimer, 1000);
+    countdownIntervalId = setInterval(updateCountdownTimer, 1000);
     addProductCardListeners();
 }
 
@@ -325,9 +358,10 @@ function createProductCard(product) {
             <div class="product-image">
                 <img src="${getProductImageUrl(product.image, 300, 300)}" alt="${product.name}">
                 <div class="product-badges">
-                    ${product.tags.includes('new') ? '<span class="product-badge">NOUVEAU</span>' : ''}
+                    ${isProductNew(product) ? '<span class="product-badge">NOUVEAU</span>' : ''}
                     ${product.tags.includes('bestseller') ? '<span class="product-badge">BEST-SELLER</span>' : ''}
-                    ${product.isSellerProduct ? '<span class="product-badge seller-badge">VENDEUR</span>' : ''}
+                    ${product.isSellerProduct && product.isOfficial ? '<span class="product-badge official-badge">OFFICIEL</span>' : ''}
+                    ${product.isSellerProduct && !product.isOfficial ? '<span class="product-badge seller-badge">VENDEUR</span>' : ''}
                 </div>
                 <div class="product-actions-hover">
                     <button onclick="event.stopPropagation(); toggleWishlist(this)"><i class="fas fa-heart"></i></button>
@@ -377,17 +411,57 @@ function addProductCardListeners() {
     });
 }
 
-function filterProducts(category) {
-    const buttons = document.querySelectorAll('.tab-btn');
+function filterNewProducts(department) {
+    const buttons = document.querySelectorAll('#newProductsFilterTabs .tab-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
+    if (event) event.target.classList.add('active');
 
-    // Logique de filtrage
-    const allProducts = getAllProducts();
-    const filtered = category === 'All' ? allProducts : allProducts.filter(p => p.category === category);
+    const newProducts = getAllProducts().filter(isProductNew);
+    const filtered = department === 'All' ? newProducts : newProducts.filter(p => p.department === department);
     const grid = document.getElementById('newProductsGrid');
-    grid.innerHTML = filtered.map(product => createProductCard(product)).join('');
+    grid.innerHTML = filtered.length > 0
+        ? filtered.map(product => createProductCard(product)).join('')
+        : `<p class="empty-collection">Aucun nouveau produit dans ce rayon pour le moment.</p>`;
     addProductCardListeners();
+}
+
+// ===================== SECTION "TOUS NOS PRODUITS" (ACCUEIL) =====================
+// Regroupe tout le catalogue (officiel + vendeurs) hors nouveautés déjà mises
+// en avant plus haut sur la page, avec un filtre par secteur de vente sur le côté.
+let homeCatalogSectorFilter = 'All';
+
+function renderHomeCatalogProducts() {
+    const grid = document.getElementById('homeCatalogGrid');
+    if (!grid) return;
+
+    // Le catalogue complet montre TOUS les produits d'un secteur, qu'ils
+    // soient récents ou non (un produit peut très bien apparaître ici ET
+    // dans "Nouveaux produits" plus haut sur la page).
+    const allProducts = getAllProducts();
+    let items;
+
+    if (homeCatalogSectorFilter === 'All') {
+        // Vue "Tous les secteurs" : on prend quelques produits de CHAQUE
+        // rayon plutôt que de simplement couper les N premiers du tableau
+        // (sinon, selon l'ordre du catalogue, certains rayons entiers
+        // pourraient ne jamais apparaître ici).
+        const departments = ['electronique', 'construction', 'vetements', 'imprimantes'];
+        items = departments.flatMap(dep => allProducts.filter(p => p.department === dep).slice(0, 3));
+    } else {
+        items = allProducts.filter(p => p.department === homeCatalogSectorFilter).slice(0, 12);
+    }
+
+    grid.innerHTML = items.length > 0
+        ? items.map(product => createProductCard(product)).join('')
+        : `<p class="empty-collection">Aucun produit dans ce secteur pour le moment.</p>`;
+    addProductCardListeners();
+}
+
+function setHomeCatalogSector(department, btn) {
+    homeCatalogSectorFilter = department;
+    document.querySelectorAll('#homeSectorFilters .sector-filter-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    renderHomeCatalogProducts();
 }
 
 function updateCountdownTimer() {
@@ -566,6 +640,36 @@ function selectProduct(productId) {
     navigateTo('product');
 }
 
+// ===================== GALERIE PRODUIT (PLUSIEURS ANGLES) =====================
+// Combine l'image principale (product.image) et les images supplémentaires
+// éventuelles (product.images, un tableau) en une galerie de miniatures
+// cliquables. S'il n'y a qu'une seule image, aucune miniature n'est affichée.
+function renderProductGallery(product) {
+    const container = document.getElementById('thumbnailImages');
+    if (!container) return;
+
+    const allImages = [product.image, ...(product.images || [])].filter(Boolean);
+
+    if (allImages.length <= 1) {
+        container.innerHTML = '';
+        return;
+    }
+
+    container.innerHTML = allImages.map((img, index) => `
+        <div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="selectGalleryImage('${img.replace(/'/g, "\\'")}', this)">
+            <img src="${getProductImageUrl(img, 100, 100)}" alt="${product.name} — vue ${index + 1}">
+        </div>
+    `).join('');
+}
+
+function selectGalleryImage(image, thumbnailEl) {
+    const mainImg = document.getElementById('mainProductImage');
+    if (mainImg) mainImg.src = getProductImageUrl(image, 600, 600);
+
+    document.querySelectorAll('#thumbnailImages .thumbnail').forEach(t => t.classList.remove('active'));
+    if (thumbnailEl) thumbnailEl.classList.add('active');
+}
+
 function renderProductDetail() {
     if (!currentProduct) return;
 
@@ -575,6 +679,7 @@ function renderProductDetail() {
     // Images
     document.getElementById('mainProductImage').src = getProductImageUrl(currentProduct.image, 600, 600);
     document.getElementById('mainProductImage').alt = currentProduct.name;
+    renderProductGallery(currentProduct);
 
     // Infos produit
     document.getElementById('productTitle').textContent = currentProduct.name;
@@ -606,13 +711,25 @@ function renderProductDetail() {
     document.getElementById('availability').className = currentProduct.inStock ? 'in-stock' : 'out-of-stock';
     document.getElementById('productSku').textContent = currentProduct.sku;
 
-    // Vendeur (pour les produits publiés par un vendeur partenaire)
+    // Vendeur (pour les produits publiés par un vendeur partenaire — pas pour
+    // ceux de la boutique officielle, qui se fondent avec le reste du catalogue)
     const soldByRow = document.getElementById('productSoldByRow');
-    if (currentProduct.isSellerProduct) {
+    if (currentProduct.isSellerProduct && !currentProduct.isOfficial) {
         document.getElementById('productSoldBy').textContent = currentProduct.sellerName || 'Vendeur partenaire';
         soldByRow.style.display = '';
     } else {
         soldByRow.style.display = 'none';
+    }
+
+    // Bouton "Poser une question au vendeur" — disponible pour tout produit
+    // publié depuis un compte vendeur (y compris la boutique officielle).
+    const askSellerWrapper = document.getElementById('askSellerWrapper');
+    if (askSellerWrapper) {
+        askSellerWrapper.style.display = currentProduct.isSellerProduct ? 'block' : 'none';
+        askSellerWrapper.dataset.sellerId = currentProduct.sellerId || '';
+        askSellerWrapper.dataset.productName = currentProduct.name || '';
+        const box = document.getElementById('askSellerBox');
+        if (box) { box.style.display = 'none'; box.innerHTML = ''; }
     }
 
     // Sélection couleur

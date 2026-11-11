@@ -18,6 +18,8 @@ $colors = isset($input['colors']) && is_array($input['colors'])
     ? implode(',', array_filter(array_map('trim', $input['colors']))) : '';
 $sizes = isset($input['sizes']) && is_array($input['sizes'])
     ? implode(',', array_filter(array_map('trim', $input['sizes']))) : '';
+$images = isset($input['images']) && is_array($input['images'])
+    ? implode(',', array_filter(array_map('trim', $input['images']))) : '';
 $inStock = !empty($input['inStock']) ? 1 : 0;
 
 if ($name === '' || $category === '' || $price === null || $price < 0 || $description === '') {
@@ -34,12 +36,12 @@ $sku = 'V-' . strtoupper(substr(bin2hex(random_bytes(4)), 0, 6));
 $pdo = getDb();
 $stmt = $pdo->prepare('
     INSERT INTO seller_products
-        (seller_id, department, name, category, price, original_price, discount, image, description, colors, sizes, in_stock, sku, tags)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (seller_id, department, name, category, price, original_price, discount, image, description, colors, sizes, images, in_stock, sku, tags)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ');
 $stmt->execute([
     $sellerId, $department, $name, $category, $price, $originalPrice, $discount,
-    $image, $description, $colors, $sizes, $inStock, $sku, 'new'
+    $image, $description, $colors, $sizes, $images, $inStock, $sku, ''
 ]);
 
 jsonResponse(['success' => true, 'id' => SELLER_ID_OFFSET + (int)$pdo->lastInsertId()], 201);

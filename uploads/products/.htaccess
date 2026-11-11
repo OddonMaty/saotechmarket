@@ -1,0 +1,7 @@
+# Empêche l'exécution de tout script PHP dans ce dossier, même si un
+# fichier malveillant y était un jour déposé sous un faux nom d'image.
+<FilesMatch "\.(php|phtml|php3|php4|php5|phar)$">
+    Require all denied
+</FilesMatch>
+
+Options -Indexes

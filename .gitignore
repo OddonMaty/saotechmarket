@@ -1,0 +1,10 @@
+# Fichiers système
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Fichiers téléversés par les utilisateurs (on conserve la configuration et la documentation)
+uploads/products/*
+!uploads/products/.htaccess
+!uploads/products/LISEZ-MOI.txt
+

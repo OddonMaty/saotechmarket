@@ -7,7 +7,7 @@ require_once __DIR__ . '/../db.php';
 
 $pdo = getDb();
 $stmt = $pdo->query('
-    SELECT sp.*, s.shop_name
+    SELECT sp.*, s.shop_name, s.is_official
     FROM seller_products sp
     JOIN sellers s ON s.id = sp.seller_id
     ORDER BY sp.created_at DESC
@@ -15,7 +15,7 @@ $stmt = $pdo->query('
 $rows = $stmt->fetchAll();
 
 $products = array_map(function ($row) {
-    return formatSellerProductRow($row, $row['shop_name']);
+    return formatSellerProductRow($row, $row['shop_name'], (bool)$row['is_official']);
 }, $rows);
 
 jsonResponse(['products' => $products]);

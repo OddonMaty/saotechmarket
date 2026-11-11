@@ -8,7 +8,7 @@ if (empty($_SESSION['seller_id'])) {
 }
 
 $pdo = getDb();
-$stmt = $pdo->prepare('SELECT id, shop_name, owner_name, phone, email, city FROM sellers WHERE id = ?');
+$stmt = $pdo->prepare('SELECT id, shop_name, owner_name, phone, email, city, is_official FROM sellers WHERE id = ?');
 $stmt->execute([$_SESSION['seller_id']]);
 $seller = $stmt->fetch();
 
@@ -25,4 +25,5 @@ jsonResponse(['seller' => [
     'phone' => $seller['phone'],
     'email' => $seller['email'],
     'city' => $seller['city'],
+    'isOfficial' => (bool)$seller['is_official'],
 ]]);

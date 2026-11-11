@@ -16,6 +16,7 @@ const FALLBACK_USD_TO_CDF_RATE = 2800;
 const products = [
     {
         id: 1,
+        createdAt: "2026-02-10",
         name: "Vinova SmartPhone Pro 12",
         price: 650,
         originalPrice: 950,
@@ -23,17 +24,19 @@ const products = [
         department: "electronique",
         category: "Smartphone",
         image: "1511707171634-5f897ff02aa9",
+        images: ["1583291023438-41cef6453b1f", "1573920011462-eb3003086611"],
         rating: 4.5,
         reviews: 128,
         inStock: true,
         sku: "E-00001",
         colors: ["Noir", "Argent", "Or"],
         sizes: ["64Go", "128Go", "256Go"],
-        tags: ["new", "bestseller"],
+        tags: ["bestseller"],
         description: "108MP de clarté. Vitesse 5G. Batterie toute la journée. Le seul téléphone dont vous avez besoin."
     },
     {
         id: 2,
+        createdAt: "2026-02-18",
         name: "Audio Master Pro XR",
         price: 256,
         originalPrice: 320,
@@ -52,6 +55,7 @@ const products = [
     },
     {
         id: 3,
+        createdAt: "2026-03-02",
         name: "ProTab Ultra 12\"",
         price: 489,
         originalPrice: 599,
@@ -70,6 +74,7 @@ const products = [
     },
     {
         id: 4,
+        createdAt: "2026-03-14",
         name: "StreamWatch Series 5",
         price: 199,
         originalPrice: 299,
@@ -88,6 +93,7 @@ const products = [
     },
     {
         id: 5,
+        createdAt: "2026-03-28",
         name: "ProBook 15 Ultra",
         price: 1249,
         originalPrice: 1499,
@@ -106,6 +112,7 @@ const products = [
     },
     {
         id: 6,
+        createdAt: "2026-04-10",
         name: "CineSound BT Speaker",
         price: 89,
         originalPrice: 149,
@@ -124,6 +131,7 @@ const products = [
     },
     {
         id: 7,
+        createdAt: "2026-04-22",
         name: "VisionCam Pro 4K",
         price: 799,
         originalPrice: 999,
@@ -142,6 +150,7 @@ const products = [
     },
     {
         id: 8,
+        createdAt: "2026-05-05",
         name: "CinemaView 55\" OLED",
         price: 1899,
         originalPrice: 2399,
@@ -149,6 +158,7 @@ const products = [
         department: "electronique",
         category: "Télévision",
         image: "1593359677879-a4bb92f4834b",
+        images: ["1738168259543-d0c58e2b91ed"],
         rating: 4.4,
         reviews: 112,
         inStock: true,
@@ -162,6 +172,7 @@ const products = [
     // ---------- MATÉRIAUX DE CONSTRUCTION ----------
     {
         id: 9,
+        createdAt: "2026-07-04",
         name: "Ciment Portland CEM I 42.5R",
         price: 14,
         originalPrice: 17,
@@ -175,11 +186,12 @@ const products = [
         sku: "C-00001",
         colors: [],
         sizes: ["Sac 50kg"],
-        tags: ["new"],
+        tags: [],
         description: "Ciment gris haute résistance, idéal pour fondations, dalles et maçonnerie générale. Sac de 50 kg."
     },
     {
         id: 10,
+        createdAt: "2026-07-05",
         name: "Fer à béton strié 12mm",
         price: 9,
         originalPrice: null,
@@ -198,6 +210,7 @@ const products = [
     },
     {
         id: 11,
+        createdAt: "2026-07-06",
         name: "Peinture façade extérieure",
         price: 52,
         originalPrice: 65,
@@ -211,11 +224,12 @@ const products = [
         sku: "C-00112",
         colors: ["Blanc", "Beige", "Gris clair"],
         sizes: ["Pot 20L"],
-        tags: ["new"],
+        tags: [],
         description: "Peinture façade résistante aux intempéries, forte couvrance, séchage rapide. Pot de 20 litres."
     },
     {
         id: 12,
+        createdAt: "2026-07-07",
         name: "Carrelage sol 60x60 poli",
         price: 22,
         originalPrice: 28,
@@ -236,6 +250,7 @@ const products = [
     // ---------- VÊTEMENTS ET CHAUSSURES ----------
     {
         id: 13,
+        createdAt: "2026-07-06",
         name: "Chemise coton popeline",
         price: 24,
         originalPrice: 32,
@@ -254,6 +269,7 @@ const products = [
     },
     {
         id: 14,
+        createdAt: "2026-07-07",
         name: "Robe fluide sans manches",
         price: 29,
         originalPrice: null,
@@ -267,11 +283,12 @@ const products = [
         sku: "V-00042",
         colors: ["Vert", "Bordeaux", "Noir"],
         sizes: ["S", "M", "L"],
-        tags: ["new"],
+        tags: [],
         description: "Robe légère sans manches, tissu fluide et confortable, parfaite pour toute la journée."
     },
     {
         id: 15,
+        createdAt: "2026-07-08",
         name: "Pantalon jean coupe droite",
         price: 32,
         originalPrice: 40,
@@ -290,6 +307,7 @@ const products = [
     },
     {
         id: 16,
+        createdAt: "2026-07-09",
         name: "Baskets urbaines confort",
         price: 45,
         originalPrice: 58,
@@ -303,13 +321,14 @@ const products = [
         sku: "V-00120",
         colors: ["Blanc", "Gris"],
         sizes: ["39", "40", "41", "42", "43", "44"],
-        tags: ["new"],
+        tags: [],
         description: "Baskets légères et respirantes, semelle confort pour un usage quotidien."
     },
 
     // ---------- IMPRIMANTES ----------
     {
         id: 17,
+        createdAt: "2026-07-08",
         name: "Imprimante Laser Monochrome Pro",
         price: 145,
         originalPrice: 179,
@@ -328,6 +347,7 @@ const products = [
     },
     {
         id: 18,
+        createdAt: "2026-07-09",
         name: "Imprimante Jet d'encre Couleur",
         price: 89,
         originalPrice: 109,
@@ -341,11 +361,12 @@ const products = [
         sku: "P-00023",
         colors: [],
         sizes: [],
-        tags: ["new"],
+        tags: [],
         description: "Imprimante jet d'encre couleur, parfaite pour les documents et photos à la maison."
     },
     {
         id: 19,
+        createdAt: "2026-07-10",
         name: "Multifonction Imprimante-Scanner-Copieur",
         price: 168,
         originalPrice: 199,

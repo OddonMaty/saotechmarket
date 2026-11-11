@@ -44,4 +44,5 @@ jsonResponse([
     'phone' => $phone,
     'email' => $email,
     'city' => $city,
+    'isOfficial' => false,
 ], 201);

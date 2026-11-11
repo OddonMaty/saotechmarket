@@ -14,7 +14,7 @@ function navHeader(active) {
     <div class="container">
         <div class="top-bar-left">
             <span><i class="fas fa-phone"></i> +243 907 261 113</span>
-            <span class="hidden-mobile"><i class="fas fa-envelope"></i> contact@saotechmarket.cd</span>
+            <span class="hidden-mobile"><i class="fas fa-envelope"></i> contact@saotechmarket.com</span>
         </div>
         <div class="top-bar-right">
             <span class="hidden-mobile">Livraison gratuite à Bukavu et Uvira dès 280 000 FC d'achat · Aussi à Goma et Baraka</span>
@@ -27,8 +27,7 @@ function navHeader(active) {
 <header class="header">
     <div class="container header-content">
         <div class="logo" onclick="navigateTo('home')">
-            <span class="logo-primary">SAO TECH</span>
-            <span class="logo-secondary">MARKET</span>
+            <img src="images/brand/logo.png" alt="Sao Tech Market" class="logo-img">
         </div>
         
         <div class="search-bar">
@@ -156,8 +155,7 @@ const footerBlock = `
                     <h4>Contactez-nous</h4>
                     <ul class="contact-list">
                         <li><i class="fas fa-phone"></i> +243 907 261 113</li>
-                        <li><i class="fas fa-envelope"></i> contact@saotechmarket.cd</li>
-                        <li><i class="fas fa-map-marker-alt"></i> Avenue Patrice Lumumba, Bukavu</li>
+                        <li><i class="fas fa-envelope"></i> contact@saotechmarket.com</li>
                         <li><i class="fas fa-clock"></i> Lun–Sam : 8h – 19h</li>
                     </ul>
                     <div class="social-links">
@@ -173,7 +171,7 @@ const footerBlock = `
     <div class="footer-bottom">
         <div class="container">
             <p>&copy; 2026 Sao Tech Market. Tous droits réservés.</p>
-            <p>SAO TECH MARKET</p>
+            <p>Plateforme créée par <a href="https://saotechagency.com" target="_blank" rel="noopener noreferrer" class="footer-credit-link">Sao Tech Agency</a></p>
         </div>
     </div>
 </footer>`;
@@ -253,11 +251,12 @@ ${navHeader('home')}
     <div class="container">
         <div class="section-header">
             <h2>Nouveaux produits</h2>
-            <div class="filter-tabs">
-                <button class="tab-btn active" onclick="filterProducts('All')">Tous</button>
-                <button class="tab-btn" onclick="filterProducts('Smartphone')">Smartphone</button>
-                <button class="tab-btn" onclick="filterProducts('Tablette')">Tablette</button>
-                <button class="tab-btn" onclick="filterProducts('Audio')">Audio</button>
+            <div class="filter-tabs" id="newProductsFilterTabs">
+                <button class="tab-btn active" onclick="filterNewProducts('All')">Tous</button>
+                <button class="tab-btn" onclick="filterNewProducts('electronique')">Électronique</button>
+                <button class="tab-btn" onclick="filterNewProducts('construction')">Construction</button>
+                <button class="tab-btn" onclick="filterNewProducts('vetements')">Vêtements</button>
+                <button class="tab-btn" onclick="filterNewProducts('imprimantes')">Imprimantes</button>
             </div>
         </div>
         <div class="products-grid" id="newProductsGrid"></div>
@@ -288,6 +287,28 @@ ${navHeader('home')}
             <div class="countdown-timer" id="countdownTimer"></div>
         </div>
         <div class="products-grid" id="dealsProductsGrid"></div>
+    </div>
+</section>
+
+<!-- Tous nos produits (catalogue complet, hors nouveautés) -->
+<section class="products-section home-catalog-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Tous nos produits</h2>
+        </div>
+        <div class="home-catalog-layout">
+            <aside class="home-sector-filters" id="homeSectorFilters">
+                <button class="sector-filter-btn active" onclick="setHomeCatalogSector('All', this)">Tous les secteurs</button>
+                <button class="sector-filter-btn" onclick="setHomeCatalogSector('electronique', this)"><i class="fas fa-mobile-alt"></i> Gadgets Électroniques</button>
+                <button class="sector-filter-btn" onclick="setHomeCatalogSector('construction', this)"><i class="fas fa-hard-hat"></i> Matériaux de Construction</button>
+                <button class="sector-filter-btn" onclick="setHomeCatalogSector('vetements', this)"><i class="fas fa-tshirt"></i> Vêtements et Chaussures</button>
+                <button class="sector-filter-btn" onclick="setHomeCatalogSector('imprimantes', this)"><i class="fas fa-print"></i> Imprimantes</button>
+            </aside>
+            <div class="products-grid" id="homeCatalogGrid"></div>
+        </div>
+        <div class="home-catalog-cta">
+            <button class="btn btn-outline" onclick="navigateToDepartment('All')">Voir tout le catalogue <i class="fas fa-arrow-right"></i></button>
+        </div>
     </div>
 </section>
 
@@ -465,6 +486,10 @@ ${navHeader('collection')}
                     <span class="detail-label">Vendu par :</span>
                     <span id="productSoldBy"></span>
                 </div>
+                <div id="askSellerWrapper" style="display:none; margin-top: 0.5rem;">
+                    <button class="btn btn-outline" onclick="openAskSellerBox()"><i class="fas fa-comment-dots"></i> Poser une question au vendeur</button>
+                    <div id="askSellerBox" style="display:none; margin-top: 0.75rem;"></div>
+                </div>
             </div>
 
             <!-- Choix couleur -->
@@ -590,7 +615,7 @@ ${navHeader('about')}
             <div class="step-card">
                 <span class="step-number">02</span>
                 <h3>Passez votre commande</h3>
-                <p>Paiement sécurisé (Mobile Money, carte, cash à la livraison) et traitement rapide.</p>
+                <p>Paiement à la livraison (Mobile Money ou espèces) et traitement rapide.</p>
             </div>
             <div class="step-card">
                 <span class="step-number">03</span>
@@ -609,22 +634,20 @@ ${navHeader('about')}
             <li><i class="fas fa-check"></i> Retours gratuits sur toutes les commandes à Bukavu et Uvira</li>
             <li><i class="fas fa-check"></i> Support 24/7 par chat et e-mail</li>
             <li><i class="fas fa-check"></i> Garantie du meilleur prix</li>
-            <li><i class="fas fa-check"></i> Paiement sécurisé : Mobile Money, carte, cash à la livraison</li>
+            <li><i class="fas fa-check"></i> Paiement à la livraison : Mobile Money ou espèces</li>
         </ul>
     </section>
 
-    <!-- Agences -->
+    <!-- Zones de service -->
     <section class="locations">
-        <h2>Nos agences</h2>
+        <h2>Nos zones de service</h2>
         <div class="locations-grid">
             <div class="location-card">
                 <h3>Bukavu (siège)</h3>
-                <p><i class="fas fa-map-marker-alt"></i> Avenue Patrice Lumumba, Bukavu</p>
                 <p><i class="fas fa-clock"></i> 8h – 19h</p>
             </div>
             <div class="location-card">
                 <h3>Uvira</h3>
-                <p><i class="fas fa-map-marker-alt"></i> Avenue du Marché Central, Uvira</p>
                 <p><i class="fas fa-clock"></i> 9h – 18h</p>
             </div>
         </div>
@@ -639,8 +662,8 @@ ${navHeader('contact')}
 
 <!-- Hero Contact -->
 <div class="contact-hero">
-    <i class="fas fa-map-marker-alt"></i>
-    <span>Avenue Patrice Lumumba, Bukavu, RDC</span>
+    <i class="fas fa-phone"></i>
+    <span>+243 907 261 113 — Service client en ligne, RDC</span>
 </div>
 
 <!-- Contenu Contact -->
@@ -662,17 +685,10 @@ ${navHeader('contact')}
     <div class="contact-info">
         <h2>Informations de contact</h2>
         <div class="info-item">
-            <i class="fas fa-map-marker-alt"></i>
-            <div>
-                <p class="info-label">Adresse</p>
-                <p>Avenue Patrice Lumumba, n°12, Bukavu, RDC</p>
-            </div>
-        </div>
-        <div class="info-item">
             <i class="fas fa-envelope"></i>
             <div>
                 <p class="info-label">E-mail</p>
-                <p>contact@saotechmarket.cd</p>
+                <p>contact@saotechmarket.com</p>
             </div>
         </div>
         <div class="info-item">
@@ -772,7 +788,7 @@ ${navHeader('')}
 
     <section>
         <h2>4. Paiement</h2>
-        <p>Le paiement peut être effectué par Mobile Money, carte bancaire, ou en espèces à la livraison, selon les options disponibles dans votre zone.</p>
+        <p>Le paiement peut être effectué par Mobile Money ou en espèces à la livraison, selon les options disponibles dans votre zone. Le paiement par carte bancaire n'est pas encore proposé.</p>
     </section>
 
     <section>
@@ -792,7 +808,7 @@ ${navHeader('')}
 
     <section>
         <h2>8. Contact</h2>
-        <p>Pour toute question relative à ces conditions, vous pouvez nous contacter à contact@saotechmarket.cd ou au +243 907 261 113.</p>
+        <p>Pour toute question relative à ces conditions, vous pouvez nous contacter à contact@saotechmarket.com ou au +243 907 261 113.</p>
     </section>
 </div>
 </div>
@@ -814,20 +830,19 @@ ${navHeader('')}
         <h2>Moyens de paiement acceptés</h2>
         <ul>
             <li><strong>Mobile Money</strong> — M-Pesa, Airtel Money, Orange Money</li>
-            <li><strong>Carte bancaire</strong> — Visa et Mastercard</li>
             <li><strong>Cash à la livraison</strong> — disponible à Bukavu, Uvira, Goma et Baraka</li>
         </ul>
-        <p>Toutes les transactions sont sécurisées. Sao Tech Market ne conserve jamais vos identifiants Mobile Money ou vos données bancaires complètes.</p>
+        <p>Le paiement en ligne par carte bancaire n'est pas encore disponible. Après avoir passé votre commande sur le site, notre équipe vous contacte par téléphone ou WhatsApp pour confirmer les modalités : soit un transfert Mobile Money au numéro communiqué, soit un paiement en espèces directement au livreur.</p>
     </section>
 
     <section>
         <h2>Devises</h2>
-        <p>Les prix sont affichés uniquement en francs congolais (CDF), convertis automatiquement selon le taux de change du jour. Le montant réellement débité vous est confirmé avant validation du paiement.</p>
+        <p>Les prix sont affichés uniquement en francs congolais (CDF), convertis automatiquement selon le taux de change du jour. Le montant à régler vous est confirmé par notre équipe avant la livraison.</p>
     </section>
 
     <section>
         <h2>Remboursements</h2>
-        <p>En cas de retour accepté, le remboursement est effectué sur le même moyen de paiement utilisé lors de l'achat, sous 5 à 7 jours ouvrables. Pour les paiements en cash à la livraison, le remboursement se fait par Mobile Money sur le numéro de votre choix.</p>
+        <p>En cas de retour accepté, le remboursement est effectué par Mobile Money, sur le numéro de votre choix, sous 5 à 7 jours ouvrables.</p>
     </section>
 
     <section>
@@ -986,12 +1001,12 @@ ${navHeader('')}
 
     <section>
         <h2>4. Sécurité</h2>
-        <p>Nous ne stockons jamais vos identifiants Mobile Money ni vos données bancaires complètes. Les paiements sont traités par des prestataires sécurisés.</p>
+        <p>Nous ne demandons jamais vos identifiants Mobile Money ou vos données bancaires sur le site. Le paiement se fait directement avec vous, par téléphone ou à la livraison.</p>
     </section>
 
     <section>
         <h2>5. Vos droits</h2>
-        <p>Vous pouvez à tout moment demander l'accès, la correction ou la suppression de vos données personnelles en nous contactant à contact@saotechmarket.cd.</p>
+        <p>Vous pouvez à tout moment demander l'accès, la correction ou la suppression de vos données personnelles en nous contactant à contact@saotechmarket.com.</p>
     </section>
 
     <section>

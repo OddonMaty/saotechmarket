@@ -32,6 +32,8 @@ $colors = isset($input['colors']) && is_array($input['colors'])
     ? implode(',', array_filter(array_map('trim', $input['colors']))) : '';
 $sizes = isset($input['sizes']) && is_array($input['sizes'])
     ? implode(',', array_filter(array_map('trim', $input['sizes']))) : '';
+$images = isset($input['images']) && is_array($input['images'])
+    ? implode(',', array_filter(array_map('trim', $input['images']))) : '';
 $inStock = !empty($input['inStock']) ? 1 : 0;
 
 if ($name === '' || $category === '' || $price === null || $price < 0 || $description === '') {
@@ -47,12 +49,12 @@ $discount = ($originalPrice && $originalPrice > $price)
 $stmt = $pdo->prepare('
     UPDATE seller_products
     SET department = ?, name = ?, category = ?, price = ?, original_price = ?, discount = ?,
-        image = ?, description = ?, colors = ?, sizes = ?, in_stock = ?
+        image = ?, description = ?, colors = ?, sizes = ?, images = ?, in_stock = ?
     WHERE id = ? AND seller_id = ?
 ');
 $stmt->execute([
     $department, $name, $category, $price, $originalPrice, $discount,
-    $image, $description, $colors, $sizes, $inStock, $id, $sellerId
+    $image, $description, $colors, $sizes, $images, $inStock, $id, $sellerId
 ]);
 
 jsonResponse(['success' => true]);

@@ -1,0 +1,6 @@
+Options -Indexes
+
+# Bloque l'accès direct aux fichiers de configuration et aux scripts SQL
+<FilesMatch "^(config\.php|.*\.sql)$">
+    Require all denied
+</FilesMatch>

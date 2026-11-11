@@ -80,6 +80,14 @@ body {
     cursor: pointer;
     white-space: nowrap;
     letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+}
+
+.logo-img {
+    height: 60px;
+    width: auto;
+    display: block;
 }
 
 .logo-primary {
@@ -439,6 +447,7 @@ body {
 .usp-item {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 1rem;
     padding: 1rem 1.5rem;
     color: var(--white);
@@ -525,6 +534,68 @@ body {
 .products-section {
     padding: 3rem 0;
     background-color: var(--white);
+}
+
+/* ===================== ACCUEIL — TOUS NOS PRODUITS ===================== */
+.home-catalog-section {
+    background-color: var(--light);
+}
+
+.home-catalog-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+.home-sector-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    position: sticky;
+    top: 1rem;
+}
+
+.sector-filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    background-color: var(--white);
+    border-radius: 2px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.sector-filter-btn i {
+    width: 16px;
+    text-align: center;
+    color: var(--primary);
+}
+
+.sector-filter-btn:hover {
+    border-color: var(--primary);
+    color: var(--text);
+}
+
+.sector-filter-btn.active {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--white);
+}
+
+.sector-filter-btn.active i {
+    color: var(--white);
+}
+
+.home-catalog-cta {
+    text-align: center;
+    margin-top: 2rem;
 }
 
 .section-header {
@@ -629,6 +700,10 @@ body {
 
 .product-badge.seller-badge {
     background-color: var(--dark);
+}
+
+.product-badge.official-badge {
+    background-color: var(--primary);
 }
 
 .product-actions-hover {
@@ -996,6 +1071,49 @@ body {
     accent-color: var(--primary);
 }
 
+.promo-checkbox {
+    background-color: var(--light);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    margin-top: 0.25rem;
+}
+
+.checkout-address-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.checkout-address-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background-color: var(--white);
+    cursor: pointer;
+    transition: border-color 0.2s;
+    margin-bottom: 0.5rem;
+}
+
+.checkout-address-option input[type="radio"] {
+    margin-top: 0.25rem;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+.checkout-address-option:hover {
+    border-color: var(--primary);
+}
+
+.checkout-address-option.active {
+    border-color: var(--primary);
+    background-color: var(--light);
+}
+
 .price-range {
     display: flex;
     flex-direction: column;
@@ -1139,12 +1257,14 @@ body {
 
 .thumbnail-images {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
 }
 
 .thumbnail {
     width: 80px;
     height: 80px;
+    flex-shrink: 0;
     border: 2px solid var(--border);
     border-radius: 2px;
     overflow: hidden;
@@ -2339,6 +2459,17 @@ body {
     font-size: 0.75rem;
 }
 
+.footer-credit-link {
+    color: var(--white);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s;
+}
+
+.footer-credit-link:hover {
+    color: var(--primary);
+}
+
 /* ===================== CART DRAWER ===================== */
 .cart-drawer {
     display: none;
@@ -2676,6 +2807,10 @@ body {
         gap: 1rem;
     }
 
+    .logo-img {
+        height: 44px;
+    }
+
     .search-bar {
         max-width: none;
     }
@@ -2767,6 +2902,112 @@ body {
     .sort-options {
         width: 100%;
     }
+
+    /* ---- Rythme des sections resserré sur mobile ---- */
+    .products-section,
+    .deals-section,
+    .faq-container,
+    .about-container,
+    .contact-container {
+        padding: 2.25rem 0;
+    }
+
+    .newsletter-section {
+        padding: 2.5rem 0;
+    }
+
+    .page-header {
+        padding: 2rem 0;
+    }
+
+    .info-page {
+        padding: 2rem 1rem;
+    }
+
+    /* ---- Titres redimensionnés pour ne pas dominer l'écran ---- */
+    .page-header h1 {
+        font-size: 2rem;
+    }
+
+    .section-header h2 {
+        font-size: 1.6rem;
+    }
+
+    .faq-header {
+        margin-bottom: 2rem;
+    }
+
+    .faq-header h1 {
+        font-size: 2.1rem;
+    }
+
+    .faq-contact {
+        padding: 1.5rem;
+    }
+
+    /* ---- Espace vendeur / Mon compte : cartes moins encombrantes ---- */
+    .seller-landing {
+        gap: 2rem;
+        padding: 2rem 0 2.5rem;
+    }
+
+    .seller-auth-card {
+        padding: 1.5rem;
+    }
+
+    .seller-product-form-wrapper {
+        padding: 1.25rem;
+    }
+
+    .seller-dashboard-header {
+        padding: 1.75rem 0 1.25rem;
+    }
+
+    .seller-dashboard-header h1 {
+        font-size: 1.5rem;
+    }
+
+    /* ---- Fiche produit : éviter tout débordement des actions ---- */
+    .product-actions {
+        flex-wrap: wrap;
+    }
+
+    .product-share {
+        flex-wrap: wrap;
+        gap: 1.25rem;
+    }
+
+    /* ---- Accueil : Tous nos produits, secteurs en ligne au lieu du côté ---- */
+    .home-catalog-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .home-sector-filters {
+        flex-direction: row;
+        flex-wrap: wrap;
+        position: static;
+    }
+
+    .sector-filter-btn {
+        flex: 1 1 auto;
+        justify-content: center;
+    }
+
+    /* ---- Tableaux d'information (livraison, paiements...) plus compacts ---- */
+    .info-table {
+        font-size: 0.8rem;
+    }
+
+    .info-table th,
+    .info-table td {
+        padding: 0.5rem;
+    }
+
+    /* ---- Pied de page centré une fois empilé ---- */
+    .footer-bottom .container {
+        justify-content: center;
+        text-align: center;
+    }
 }
 
 @media (max-width: 640px) {
@@ -2845,6 +3086,34 @@ body {
         align-items: flex-start;
         gap: 1rem;
     }
+
+    .hero-content h1 {
+        font-size: 1.65rem;
+    }
+
+    .page-header h1 {
+        font-size: 1.75rem;
+    }
+
+    .faq-header h1 {
+        font-size: 1.85rem;
+    }
+
+    .section-header h2 {
+        font-size: 1.4rem;
+    }
+
+    .seller-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .seller-dashboard-actions {
+        width: 100%;
+    }
+
+    .seller-dashboard-actions .btn {
+        flex: 1;
+    }
 }
 
 /* ===================== ESPACE VENDEUR ===================== */
@@ -2912,6 +3181,82 @@ body {
     display: flex;
     gap: 0.75rem;
     flex-wrap: wrap;
+}
+
+.notif-bell-btn {
+    position: relative;
+}
+
+.notif-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    background-color: var(--danger);
+    color: var(--white);
+    font-size: 0.7rem;
+    font-weight: 700;
+    border-radius: 999px;
+    margin-left: 0.35rem;
+}
+
+.chat-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    max-height: 320px;
+    overflow-y: auto;
+    padding: 1rem;
+    background-color: var(--light);
+    border-radius: 2px;
+    margin-bottom: 1rem;
+}
+
+.chat-bubble {
+    max-width: 75%;
+    padding: 0.6rem 0.85rem;
+    border-radius: 10px;
+    font-size: 0.875rem;
+}
+
+.chat-bubble p {
+    margin: 0;
+}
+
+.chat-bubble-time {
+    display: block;
+    font-size: 0.7rem;
+    opacity: 0.7;
+    margin-top: 0.25rem;
+}
+
+.chat-bubble-mine {
+    align-self: flex-end;
+    background-color: var(--primary);
+    color: var(--white);
+    border-bottom-right-radius: 2px;
+}
+
+.chat-bubble-theirs {
+    align-self: flex-start;
+    background-color: var(--white);
+    border: 1px solid var(--border);
+    border-bottom-left-radius: 2px;
+}
+
+.chat-reply-form {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.chat-reply-form input {
+    flex: 1;
+    padding: 0.6rem 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    font-size: 0.875rem;
 }
 
 .seller-stats {
