@@ -1,0 +1,52 @@
+{
+  "common": {
+    "brand": "Sao Tech Market",
+    "tagline": "Marketplace Électronique Premium en RDC",
+    "searchPlaceholder": "Rechercher un produit, une marque...",
+    "contactPhone": "+243 907 261 113",
+    "contactEmail": "contact@saotechmarket.com",
+    "citiesCovered": "Bukavu • Uvira • Goma • Baraka",
+    "freeDeliveryInfo": "Livraison rapide partout en RDC",
+    "currency": "FC",
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue"
+  },
+  "nav": {
+    "home": "Accueil",
+    "products": "Nos produits",
+    "sellerSpace": "Vendeur",
+    "account": "Compte",
+    "cart": "Panier",
+    "faq": "FAQ",
+    "about": "À propos",
+    "contact": "Contact"
+  },
+  "departments": {
+    "electronique": "Gadgets Électroniques",
+    "construction": "Matériaux de Construction",
+    "vetements": "Vêtements et Chaussures",
+    "imprimantes": "Imprimantes"
+  },
+  "footer": {
+    "aboutTitle": "À propos de Sao Tech",
+    "aboutText": "Sao Tech Market est la plateforme de commerce électronique de référence en RDC, reliant acheteurs et commerçants locaux.",
+    "customerService": "Service Client",
+    "legal": "Mentions légales",
+    "newsletterTitle": "Newsletter",
+    "newsletterText": "Recevez nos meilleures offres et promotions par e-mail.",
+    "newsletterPlaceholder": "Votre adresse e-mail",
+    "newsletterButton": "S'abonner",
+    "copyright": "© 2026 Sao Tech Market. Tous droits réservés."
+  },
+  "health": {
+    "title": "État des Services",
+    "apiStatus": "API Backend Fastify",
+    "statusOk": "Opérationnel",
+    "statusError": "Inaccessible",
+    "uptime": "Disponibilité",
+    "version": "Version",
+    "service": "Service",
+    "checkedAt": "Vérifié à"
+  }
+}
+

@@ -1,10 +1,36 @@
-# Fichiers système
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Builds & Cache
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+.eslintcache
+
+# Environment
+.env
+.env*.local
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Coverage
+coverage/
+
+# OS
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# Fichiers téléversés par les utilisateurs (on conserve la configuration et la documentation)
+# User uploads (legacy / local runtime)
 uploads/products/*
-!uploads/products/.htaccess
-!uploads/products/LISEZ-MOI.txt
-
+!legacy/uploads/products/.htaccess
+!legacy/uploads/products/LISEZ-MOI.txt

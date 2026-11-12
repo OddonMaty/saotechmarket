@@ -1,0 +1,51 @@
+{
+  "common": {
+    "brand": "Sao Tech Market",
+    "tagline": "Premium Electronics Marketplace in DRC",
+    "searchPlaceholder": "Search for a product, brand...",
+    "contactPhone": "+243 907 261 113",
+    "contactEmail": "contact@saotechmarket.com",
+    "citiesCovered": "Bukavu • Uvira • Goma • Baraka",
+    "freeDeliveryInfo": "Fast delivery across DRC",
+    "currency": "FC",
+    "loading": "Loading...",
+    "error": "An error occurred"
+  },
+  "nav": {
+    "home": "Home",
+    "products": "Our products",
+    "sellerSpace": "Seller",
+    "account": "Account",
+    "cart": "Cart",
+    "faq": "FAQ",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "departments": {
+    "electronique": "Electronic Gadgets",
+    "construction": "Building Materials",
+    "vetements": "Clothing & Shoes",
+    "imprimantes": "Printers"
+  },
+  "footer": {
+    "aboutTitle": "About Sao Tech",
+    "aboutText": "Sao Tech Market is the leading e-commerce platform in DRC, connecting buyers and local merchants.",
+    "customerService": "Customer Service",
+    "legal": "Legal Notices",
+    "newsletterTitle": "Newsletter",
+    "newsletterText": "Get our best deals and promotions directly in your inbox.",
+    "newsletterPlaceholder": "Your email address",
+    "newsletterButton": "Subscribe",
+    "copyright": "© 2026 Sao Tech Market. All rights reserved."
+  },
+  "health": {
+    "title": "Services Status",
+    "apiStatus": "Backend Fastify API",
+    "statusOk": "Operational",
+    "statusError": "Unreachable",
+    "uptime": "Uptime",
+    "version": "Version",
+    "service": "Service",
+    "checkedAt": "Checked at"
+  }
+}

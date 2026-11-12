@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #2B8C87;
+  --primary-dark: #22706C;
+  --dark: #1E1E22;
+  --light: #F5F5F5;
+  --border: #E5E5E5;
+  --text: #1E1E22;
+  --text-muted: #666666;
+  --white: #FFFFFF;
+  --success: #10B981;
+  --danger: #EF4444;
+}
+
+body {
+  color: var(--text);
+  background-color: var(--white);
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  line-height: 1.6;
+}
+
+/* ==================== BOUTONS IDENTIQUES AU LEGACY ==================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+}
+
+.btn-outline {
+  border-color: var(--border);
+  color: var(--text);
+  background: transparent;
+}
+
+.btn-outline:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* ==================== BADGES ==================== */
+.badge-vendeur {
+  background-color: #FEF3C7;
+  color: #92400E;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-officiel {
+  background-color: #D1FAE5;
+  color: #065F46;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
